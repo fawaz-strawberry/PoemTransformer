@@ -1,0 +1,1 @@
+Folder contains images to be uploaded to IG
