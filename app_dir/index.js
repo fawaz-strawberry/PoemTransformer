@@ -10,6 +10,8 @@ var FULL_PATH = "https://api.github.com/repos/fawaz-strawberry/PoemTran5sformer/
 var FACEBOOK_API = "https://graph.facebook.com/v12.0/"
 var FACEBOOK_API_SUBSET = "https://graph.facebook.com/"
 
+var IMAGES_FOLDER = "C:/Users/fawaz/Documents/GitHub/PoemTransformer/images/"
+var POSTED_TEXT = "C:/Users/fawaz/Documents/GitHub/PoemTransformer/app_dir/posted_images.txt"
 function getFileList(path){
 
     var all_files = []
@@ -63,7 +65,7 @@ const sleep = (milliseconds) => {
 
 async function compareFiles(){
     
-    local_files = await getFileList("../images/")
+    local_files = await getFileList(IMAGES_FOLDER)
     github_files = await getGithubImages()
 
     console.log(local_files)
@@ -74,32 +76,41 @@ async function compareFiles(){
         if(github_files.indexOf(local_files[i]) !== -1)
         {
             console.log("Matched " + local_files[i])
+            // await postImage(github_files)
         }
         else
         {
             console.log("Inserting " + local_files[i])
-            encoding = base64_encode("../images/" + local_files[i])
-            addImage(encoding, local_files[i])
-            await sleep(3000)
+            encoding = base64_encode(IMAGES_FOLDER + local_files[i])
+            addImage(encoding, local_files[i], github_files)
+            // await postImage(github_files)
+            // break
         }
     }
 
     //Post an image to IG
-    postImage(github_files)
+    await postImage(github_files)
+
 }
 
 function postImage(files_to_add)
 {
-    var results = fs.readFileSync("posted_images.txt").toString()
+    var results = fs.readFileSync(POSTED_TEXT).toString()
     
     images = results.split("\r\n")
+
+    console.log("\n\n============")
+    console.log("Images and Files to add diff is...")
     console.log(images)
+    console.log(files_to_add)
+    console.log("============\n\n")
 
     for(var i = 0; i < files_to_add.length; i++){
+
         if(images.indexOf(files_to_add[i]) === -1)
         {
             console.log("Posting image: " + files_to_add[i])
-            fs.writeFile(path="posted_images.txt", data=results + "\r\n" + files_to_add[i], () => {}) 
+            fs.writeFile(path=POSTED_TEXT, data=results + "\r\n" + files_to_add[i], () => {}) 
 
             //Ask Github for the file URL of the image
             console.log("Calling GITHUB API: " + GITHUB_API + ADD_FILE + files_to_add[i])
@@ -144,13 +155,13 @@ function postImage(files_to_add)
 
                 //Make the call to the API to send image
 
-            })
+            }).catch(err => {console.log("Failed to get URL: " + err)})
             break
         }
     }
 }
 
-function addImage(encoding, filename)
+function addImage(encoding, filename, github_files)
 {
     axios.put(GITHUB_API + ADD_FILE + filename, {
         "message":"poggers bro",
@@ -161,6 +172,7 @@ function addImage(encoding, filename)
         }
       }).then(response => {
             console.log("Successful ?")
+            postImage(github_files)
       })
 }
 
