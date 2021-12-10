@@ -3,7 +3,7 @@ import random
 from PIL import Image, ImageDraw, ImageFont
 
 
-file1 = open("latest_generation.txt")
+file1 = open("C:/Users/ashar/OneDrive/Documents/GitHub/PoemTransformer/latest_generation.txt")
 lines = file1.readlines()
 
 title = "Pogger Poem"
@@ -58,7 +58,7 @@ print(author)
 
 poem += "\n-" + author
 
-BACKGROUNDS_FOLDER = "C:/Users/fawaz/Pictures/IG_BACKGROUNDS/"
+BACKGROUNDS_FOLDER = "C:/Users/ashar/OneDrive/Documents/GitHub/PoemTransformer/IG_BACKGROUNDS/"
 
 images = os.listdir(BACKGROUNDS_FOLDER)
 
@@ -74,8 +74,8 @@ yMax = img.size[1]
 d1 = ImageDraw.Draw(img)
 
 #FONT_TTF = "C:/Users/fawaz/Documents/Fonts/WinterSong-owRGB.ttf"
-FONT_TTF = "C:/Users/fawaz/Documents/Fonts/futura bold/Futura Bold.ttf"
-FONT_TTF = "C:/Users/fawaz/Documents/Fonts/Starmoon-lg5v5.otf"
+#FONT_TTF = "C:/Users/fawaz/Documents/Fonts/futura bold/Futura Bold.ttf"
+FONT_TTF = "C:/Users/ashar/OneDrive/Documents/GitHub/PoemTransformer/Starmoon-lg5v5.otf"
 
 myFont = ImageFont.truetype(FONT_TTF, int(xMax * .121))
 miniFont = ImageFont.truetype(FONT_TTF, int(xMax * .12))
@@ -99,7 +99,6 @@ d1.text((coordinates[0] - 3, coordinates[1] + int(xMax * .2)), poem, font=poemMi
 
 
 
-img.show()
 img_size = img.size
 
 maxWidth = 1000
@@ -117,5 +116,5 @@ print(img_size)
 out = img.resize(img_size)
 title = title.replace(".", "")
 author = author.replace(" ", "_")
-full_file_name = ("images/" + author + "_" + title + ".jpg").replace(" ", "")
+full_file_name = ("C:/Users/ashar/OneDrive/Documents/GitHub/PoemTransformer/images/" + author + "_" + title + ".jpg").replace(" ", "")
 out.save(full_file_name, "JPEG", quality=99, optimize=True)
